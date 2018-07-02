@@ -22,7 +22,7 @@ class App extends Component {
        this.state = {
          pictures: pictures,
          score: 0,
-         win: 8,
+         win: win,
          message: ""
        };
        this.handleClick = this.handleClick.bind(this);
@@ -30,18 +30,23 @@ class App extends Component {
 
   handleClick = () => {
     this.setState({pictures: chance.shuffle(this.state.pictures)});
+    this.handleScore();
+    
+   console.log("clicked")
+  }
+
+  handleScore = () => {
     this.setState({score: this.state.score + 1});
 
-    if (this.setState.score + 1 === win) {
+    if (this.setState.score + 1 === this.state.win) {
       console.log("you win")
     } else {
       console.log("loser")
     }
-   console.log("clicked", score)
   }
 
   // loser = () => {
-  //   if (this.setState.score + 1 > 8){
+  //   if (this.setState.score + 1 > this.state.win){
   //     console.log("lost")
   //   }
   // }
@@ -76,9 +81,6 @@ class App extends Component {
             )
           })}
         </div>
-        {/* <h1>Hello {this.state.name}</h1>
-        <button className= "test" onClick={this.handleClick}>click it</button>
-      </div> */}
       </div>
     );
   }
