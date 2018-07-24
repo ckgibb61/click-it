@@ -7,6 +7,7 @@ import {Chance} from 'chance';
 const chance = new Chance();
 let score;
 const win = 8;
+// const id = pictures.id;
 
 // class App extends Component {
 
@@ -23,33 +24,36 @@ class App extends Component {
          pictures: pictures,
          score: 0,
          win: win,
-         message: ""
+         message: "",
+         clickedPicId: "",
+         gameOver: false,
        };
        this.handleClick = this.handleClick.bind(this);
      }
 
-  handleClick = () => {
-    this.setState({pictures: chance.shuffle(this.state.pictures)});
-    this.handleScore();
+  handleClick = (id) => {
+    this.handleScore(id);
+    this.setState({
+      clickedPicId: id,
+      pictures: chance.shuffle(this.state.pictures)
+    });
     
    console.log("clicked")
   }
 
-  handleScore = () => {
+  handleScore = (id) => {
     this.setState({score: this.state.score + 1});
-
-    if (this.setState.score + 1 === this.state.win) {
+    
+    if (this.state.clickedPicId === id) {
+      console.log("game over")
+      this.setState({score:0, gameOver: true, message: "You lose!"})
+    } else if (this.state.score + 1 === this.state.win) {
+      this.setState({message: "You Win!"})  
       console.log("you win")
-    } else {
-      console.log("loser")
-    }
+      }
+    
   }
 
-  // loser = () => {
-  //   if (this.setState.score + 1 > this.state.win){
-  //     console.log("lost")
-  //   }
-  // }
 
   render() {
     const myStyles = {
@@ -57,12 +61,11 @@ class App extends Component {
         width: "200px",
         height: "200px",
         paddingLeft: "40px",
-        paddingTop: "40px"
-      },
-      secondClassName: {
-        
+        paddingTop: "40px",
+        display: this.state.gameOver ? "none" : ""
       }
     }
+  
     return (
       <div className="App">
         <header className="App-header">
@@ -71,12 +74,15 @@ class App extends Component {
         </header>
         < div className = "pictures" >
         <h3 className="score">Score: {this.state.score}</h3>
+        <h3 className="message"> {this.state.message}</h3>
           {this.state.pictures.map(singleDude => {
               return (
                 <img src={singleDude.image}
                      style={myStyles.firstClassName}
-                     onClick={this.handleClick} 
-                    //  onClick={this.handleScore} //breaks shuffle, but counts
+                     id={pictures.id}
+                     onClick={() => {
+                       this.handleClick(singleDude.id)
+                     }} 
                 />
             )
           })}
@@ -87,63 +93,3 @@ class App extends Component {
 }
 
 export default App;
-
-
-//  let clickedPictures: [];
-
-//  class App extends Component {
-//    constructor(props) {
-//      super(props);
-//      this.state = {
-//        pictures,
-//        clickedPictures
-//      };
-//      this.handleClick = this.handleClick.bind(this);
-//    }
-
-//    // randomize() {
-//    //   console.log("random");
-//    //     var items = this.state.items.slice()
-
-//    //     // Find the index of the selected item within the current items array.
-//    //     var selectedItemName = this.state.selected;
-
-//    //     function isSelectedItem(element, index, array) {
-//    //       return element.id === selectedItemName;
-//    //     };
-//    //     var selectedIdx = items.findIndex(isSelectedItem);
-
-//    //     // Extract that item
-//    //     var selectedItem = items[selectedIdx];
-
-//    //     // Delete the item from the items array
-//    //     items.splice(selectedIdx, 1);
-
-//    //     // Sort the items that are left over
-//    //     items.sort(function (a, b) {
-//    //       return a.id < b.id ? -1 : 1;
-//    //     });
-
-//    //     // Insert the selected item back into the array
-//    //     items.splice(1, 0, selectedItem);
-
-//    //     // Set the state to the new array
-//    //     this.setState({
-//    //       items: items
-//    //     });
-
-//    // }
-
-//    handleClick() {
-//        console.log("clicked");
-//        for (let i = pictures.length - 1; i > 0; i--) {
-//          let j = Math.floor(Math.random() * (i + 1));
-//          [pictures[i], pictures[j]] = [pictures[j], pictures[i]];
-//        }
-
-//        randomize = pictures => {
-//          let clickedPictures = this.state.clickedPictures;
-//          this.setState({
-//            name: "Bob"
-//          })
-//        }
